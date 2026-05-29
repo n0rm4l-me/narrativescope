@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NarrativeScope — Удар по Старобельску</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 24px 40px;
+      border-bottom: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .logo span { color: #6366f1; }
+
+    .badge {
+      background: #1e2535;
+      border: 1px solid #2d3748;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .hero { text-align: center; padding: 60px 40px 40px; }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #6366f1, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p { color: #94a3b8; font-size: 16px; max-width: 560px; margin: 0 auto; }
+
+    .event-card { max-width: 1100px; margin: 0 auto 40px; padding: 0 24px; }
+
+    .event-header {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .event-icon { font-size: 28px; line-height: 1; margin-top: 2px; }
+    .event-meta { flex: 1; }
+
+    .event-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6366f1;
+      margin-bottom: 6px;
+    }
+
+    .event-title { font-size: 20px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+    .event-date { font-size: 13px; color: #64748b; }
+
+    .narratives {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      border-left: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative {
+      padding: 22px;
+      border-bottom: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative:last-child { border-right: none; }
+
+    .narrative-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+
+    .source-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-ru { background: #ef4444; }
+    .dot-ua { background: #3b82f6; }
+    .dot-west { background: #10b981; }
+    .dot-isw { background: #f59e0b; }
+
+    .source-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .source-tag {
+      font-size: 11px;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-left: auto;
+    }
+
+    .tag-ru { color: #f87171; background: #2d1515; }
+    .tag-ua { color: #60a5fa; background: #0f1f35; }
+    .tag-west { color: #34d399; background: #0d2420; }
+    .tag-isw { color: #fcd34d; background: #1a1500; }
+
+    .narrative h3 {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #64748b;
+      margin-bottom: 8px;
+      margin-top: 14px;
+    }
+
+    .narrative h3:first-of-type { margin-top: 0; }
+
+    .narrative p { font-size: 13px; line-height: 1.65; color: #cbd5e1; margin-bottom: 12px; }
+
+    .emphasis-list { list-style: none; margin-bottom: 12px; }
+
+    .emphasis-list li {
+      font-size: 12px;
+      color: #94a3b8;
+      padding: 3px 0 3px 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .emphasis-list li::before { content: "→"; position: absolute; left: 0; color: #4b5563; }
+
+    .omission {
+      background: #1a1205;
+      border: 1px solid #44320a;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #d97706;
+      margin-top: 12px;
+    }
+
+    .omission strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; color: #92400e; }
+
+    .ai-summary {
+      background: linear-gradient(135deg, #1e1b3a, #16213e);
+      border: 1px solid #3730a3;
+      border-top: none;
+      border-radius: 0 0 16px 16px;
+      padding: 28px;
+    }
+
+    .ai-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #818cf8;
+      margin-bottom: 16px;
+    }
+
+    .ai-label::before { content: "✦"; font-size: 14px; }
+
+    .ai-summary h2 { font-size: 17px; font-weight: 700; margin-bottom: 12px; color: #e2e8f0; }
+
+    .ai-summary p { font-size: 14px; line-height: 1.7; color: #94a3b8; margin-bottom: 12px; }
+
+    .divergence-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+    .pill {
+      background: #1e1b3a;
+      border: 1px solid #3730a3;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #a5b4fc;
+    }
+
+    .fact-check-bar { max-width: 1100px; margin: 0 auto 40px; padding: 0 24px; }
+
+    .fact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .fact-status { font-size: 16px; flex-shrink: 0; }
+    .fact-text { flex: 1; color: #cbd5e1; line-height: 1.5; }
+    .fact-source { font-size: 11px; color: #4b5563; white-space: nowrap; }
+
+    .section-label {
+      max-width: 1100px;
+      margin: 0 auto 14px;
+      padding: 0 24px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #4b5563;
+    }
+
+    .disinfo-banner {
+      max-width: 1100px;
+      margin: 0 auto 24px;
+      padding: 0 24px;
+    }
+
+    .disinfo-box {
+      background: #1a0f0f;
+      border: 1px solid #7f1d1d;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .disinfo-icon { font-size: 24px; flex-shrink: 0; }
+
+    .disinfo-title { font-size: 13px; font-weight: 700; color: #fca5a5; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .disinfo-text { font-size: 13px; color: #fca5a5; line-height: 1.6; opacity: 0.8; }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid #1e2535;
+      color: #4b5563;
+      font-size: 13px;
+    }
+
+    footer strong { color: #6366f1; }
+
+    @media (max-width: 900px) {
+      .narratives { grid-template-columns: 1fr 1fr; }
+      .narrative:nth-child(2) { border-right: none; }
+      .narrative:nth-child(3) { border-right: 1px solid #2d3748; }
+    }
+
+    @media (max-width: 600px) {
+      .narratives { grid-template-columns: 1fr; }
+      .narrative { border-right: none !important; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Narrative<span>Scope</span></div>
+    <div class="badge">Демо · 29 мая 2026</div>
+  </header>
+
+  <div class="hero">
+    <h1>Одно событие.<br><em>Четыре реальности.</em></h1>
+    <p>ИИ отслеживает, как одно и то же событие освещается в разных медиасистемах — и объясняет, где расходятся нарративы.</p>
+  </div>
+
+  <div class="disinfo-banner">
+    <div class="disinfo-box">
+      <div class="disinfo-icon">⚠️</div>
+      <div>
+        <div class="disinfo-title">Флаг: активная информационная операция</div>
+        <div class="disinfo-text">ISW установил, что Россия использовала этот инцидент как обоснование для удара по Киеву. Временны́е рамки опровергают версию об «ответном ударе»: подготовка пакета из 90+ ракет и 600+ дронов требует нескольких недель — то есть предшествовала событию в Старобельске. Сам факт удара подтверждён; военный или гражданский характер цели — нет.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="event-header">
+      <div class="event-icon">🎓</div>
+      <div class="event-meta">
+        <div class="event-label">Оспариваемое событие · Удар по объекту двойного назначения</div>
+        <div class="event-title">Удар по Старобельскому педагогическому колледжу — ночь с 21 на 22 мая 2026</div>
+        <div class="event-date">Старобельск, Луганская область (оккупированная территория Украины) · Источники: RT, ТАСС, Укринформ, ISW</div>
+      </div>
+    </div>
+
+    <div class="narratives">
+
+      <!-- РОССИЙСКИЙ -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-ru"></div>
+          <div class="source-name">Российские СМИ</div>
+          <div class="source-tag tag-ru">RT · ТАСС · РИА</div>
+        </div>
+
+        <h3>Сообщаемые факты</h3>
+        <p>Украинские дроны нанесли три волны ударов по общежитию Старобельского педагогического колледжа. 21 студент погиб (преимущественно девушки 14–18 лет), 44–63 человека ранены. Путин квалифицировал произошедшее как «теракт» и приказал нанести «массированный ответный удар» по Киеву.</p>
+
+        <h3>Подача материала</h3>
+        <ul class="emphasis-list">
+          <li>Жертвы очеловечены: возраст, пол, детские фотографии, горе родителей</li>
+          <li>Уполномоченный по правам человека Лантратова посетила место события и заявила: «никаких следов военного присутствия, только детские игрушки»</li>
+          <li>Удар по Киеву преподнесён как «законный ответный удар» и «месть Зеленского» в обратном прочтении</li>
+          <li>Западные СМИ обвиняются в замалчивании события</li>
+          <li>Спикер Госдумы Володин утверждает, что для удара использовались дроны со Starlink — «спутники Маска убивают детей»</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Умалчивается</strong>
+          Версия Украины о военном объекте (Центр «Рубикон»). Военный квартал российских сил на территории колледжа. Хронологическое несоответствие версии об «ответном ударе». Расхождения в собственных ранних данных о числе жертв.
+        </div>
+      </div>
+
+      <!-- УКРАИНСКИЙ -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-ua"></div>
+          <div class="source-name">Украинские СМИ</div>
+          <div class="source-tag tag-ua">Укринформ · УП</div>
+        </div>
+
+        <h3>Сообщаемые факты</h3>
+        <p>Генеральный штаб Украины заявил об ударе по штабу Центра передовых беспилотных технологий «Рубикон» в районе Старобельска — военного объекта, разрабатывающего и применяющего ударные дроны. На территории колледжа российские силы развернули «военный квартал».</p>
+
+        <h3>Подача материала</h3>
+        <ul class="emphasis-list">
+          <li>Категорическое отрицание версии о гражданской цели: «фейк», «очередной пропагандистский нарратив»</li>
+          <li>Переключение акцента: законный удар по военному объекту</li>
+          <li>Контекст: Россия регулярно наносит удары по украинским школам, больницам и жилым домам</li>
+          <li>Постпред Мельник: «циничная манипуляция» — Россия использует гражданские объекты как прикрытие для военной инфраструктуры</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Умалчивается</strong>
+          Независимые доказательства наличия объекта «Рубикон». Признание возможного присутствия гражданских студентов. Прямое опровержение данных о числе жертв.
+        </div>
+      </div>
+
+      <!-- ЗАПАДНЫЙ -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-west"></div>
+          <div class="source-name">Западные СМИ</div>
+          <div class="source-tag tag-west">BBC · Reuters · AP</div>
+        </div>
+
+        <h3>Сообщаемые факты</h3>
+        <p>Западные ведущие издания не опубликовали самостоятельных развёрнутых материалов о событии в Старобельске. Заместитель постпреда США в ООН Тэмми Брюс осудила удары России по Киеву, назвав их «недопустимыми», — однако не дала оценки инциденту в Старобельске.</p>
+
+        <h3>Подача материала</h3>
+        <ul class="emphasis-list">
+          <li>Отсутствие самостоятельного освещения как таковое — само по себе значимый факт</li>
+          <li>При наличии материалов — опора на формулировку «по данным российских властей»</li>
+          <li>Учёт версии Украины о военной функции объекта</li>
+          <li>RT прямо обвинила западных журналистов в отказе посетить место события</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Умалчивается</strong>
+          Детальный разбор версий о числе жертв. Независимая верификация с места событий. Принятие российского фрейминга «теракта».
+        </div>
+      </div>
+
+      <!-- ISW -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-isw"></div>
+          <div class="source-name">Независимый анализ</div>
+          <div class="source-tag tag-isw">ISW</div>
+        </div>
+
+        <h3>Сообщаемые факты</h3>
+        <p>Удар подтверждён обеими сторонами. Первоначальные данные ISW: 6 погибших, 39 раненых (22 мая). Россия заявила о 21 погибшем. Независимая верификация ни одной из версий отсутствует. Россия «не представила исчерпывающих доказательств» исключительно гражданского использования объекта.</p>
+
+        <h3>Подача материала</h3>
+        <ul class="emphasis-list">
+          <li>Версия Украины об ударе по военному объекту изложена без её принятия</li>
+          <li>Версия о «возмездии» опровергнута: подготовка 90+ ракет и 600+ дронов занимает недели и предшествовала событию в Старобельске</li>
+          <li>Квалифицировано как «информационная операция», независимо от реальной природы цели</li>
+          <li>Подчёркнуто: Россия «систематически использует факты причинения вреда гражданскому населению как инструмент войны»</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Умалчивается</strong>
+          ISW не ведёт независимого расследования на местах. Верификация ограничена открытыми источниками. Окончательный вывод о характере цели не сделан — намеренно.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ai-summary">
+      <div class="ai-label">Gemini AI · Анализ нарративов</div>
+      <h2>Где расходятся нарративы</h2>
+      <p>
+        Все стороны подтверждают один факт: <strong>удар по объекту в Старобельске действительно был нанесён</strong>. На этом согласие заканчивается. Ключевой вопрос — военный или гражданский характер цели — остаётся без независимого ответа, и именно это разногласие питает диаметрально противоположные нарративы.
+      </p>
+      <p>
+        Российские государственные СМИ сделали ставку на эмоциональный резонанс: молодые девушки, детские игрушки, государственный траур. Официальные лица представили здание исключительно как гражданский объект — без независимого подтверждения. Украина применила противоположную тактику: полное отрицание, переключение внимания на военную функцию объекта. Ни одна из сторон не предоставила проверяемых криминалистических доказательств.
+      </p>
+      <p>
+        Наиболее значимый вывод сделал ISW: <strong>«ответный» удар по Киеву был хронологически невозможен</strong>. Подготовка пакета из 90+ ракет и 600+ дронов требует нескольких недель. Это означает, что российский нарратив о возмездии — вне зависимости от реальных обстоятельств в Старобельске — является постфактумным обоснованием заранее спланированной операции.
+      </p>
+      <p>
+        Примечательное отсутствие: западные ведущие издания не опубликовали самостоятельных развёрнутых материалов. Российские СМИ подают это как доказательство западной предвзятости; более вероятное объяснение — отсутствие независимого доступа к месту событий и недостаточная верификация для соответствия редакционным стандартам.
+      </p>
+      <div class="divergence-pills">
+        <span class="pill">Характер цели оспаривается</span>
+        <span class="pill">Хронология опровергает версию о возмездии</span>
+        <span class="pill">Данные о жертвах расходятся</span>
+        <span class="pill">Западное молчание как фактор</span>
+        <span class="pill">Активная информационная операция</span>
+        <span class="pill">Независимая верификация отсутствует</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Проверка фактов · AI Перекрёстный анализ</div>
+  <div class="fact-check-bar">
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Удар по объекту Старобельского педагогического колледжа в ночь с 21 на 22 мая 2026 года — подтверждён обеими сторонами</div>
+      <div class="fact-source">Подтверждено 3/3</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">⚠️</div>
+      <div class="fact-text">21 студент погиб, преимущественно девушки 14–18 лет — данные российских властей; ISW зафиксировал 6 погибших на основании ранних источников</div>
+      <div class="fact-source">Оспаривается</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">⚠️</div>
+      <div class="fact-text">Цель — исключительно гражданское общежитие, без военного присутствия — заявление России; Украина утверждает обратное: на объекте располагался штаб Центра «Рубикон»</div>
+      <div class="fact-source">Не верифицировано</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">❌</div>
+      <div class="fact-text">Удар по Киеву — «ответный» на Старобельск — временны́е рамки физически исключают такую версию: подготовка предшествовала событию на несколько недель</div>
+      <div class="fact-source">Опровергнуто ISW</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">❌</div>
+      <div class="fact-text">Для удара использовались дроны со Starlink — заявление Воло́дина; независимое подтверждение отсутствует</div>
+      <div class="fact-source">Не подтверждено</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Россия не представила «исчерпывающих доказательств» исключительно гражданского использования объекта — оценка ISW</div>
+      <div class="fact-source">Подтверждено ISW</div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>NarrativeScope</strong> · Работает на Gemini 2.5 Pro + Vertex AI Embeddings · Построено на Google Cloud</p>
+    <p style="margin-top:8px">Прототип-демо. Источники: RT, ТАСС, Укринформ, ISW — 21–29 мая 2026.</p>
+    <p style="margin-top:8px"><a href="https://n0rm4l-me.github.io/narrativescope/" style="color:#6366f1;">← Вернуться к главной</a></p>
+  </footer>
+
+</body>
+</html>
