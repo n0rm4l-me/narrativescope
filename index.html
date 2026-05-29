@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NarrativeScope — Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 24px 40px;
+      border-bottom: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: #6366f1; }
+
+    .badge {
+      background: #1e2535;
+      border: 1px solid #2d3748;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 40px 40px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #6366f1, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      font-size: 16px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .event-card {
+      max-width: 1000px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+
+    .event-header {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .event-icon {
+      font-size: 28px;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .event-meta { flex: 1; }
+
+    .event-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6366f1;
+      margin-bottom: 6px;
+    }
+
+    .event-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .event-date {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .narratives {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-left: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative {
+      padding: 24px;
+      border-bottom: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative:last-child { border-right: none; }
+
+    .narrative-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .source-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-ru { background: #ef4444; }
+    .dot-ua { background: #3b82f6; }
+    .dot-west { background: #10b981; }
+
+    .source-name {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .source-tag {
+      font-size: 11px;
+      color: #64748b;
+      background: #1e2535;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-left: auto;
+    }
+
+    .tag-ru { color: #f87171; background: #2d1515; }
+    .tag-ua { color: #60a5fa; background: #0f1f35; }
+    .tag-west { color: #34d399; background: #0d2420; }
+
+    .narrative h3 {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .narrative p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+
+    .emphasis-list {
+      list-style: none;
+      margin-bottom: 16px;
+    }
+
+    .emphasis-list li {
+      font-size: 13px;
+      color: #94a3b8;
+      padding: 4px 0 4px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .emphasis-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #4b5563;
+    }
+
+    .omission {
+      background: #1a1205;
+      border: 1px solid #44320a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #d97706;
+    }
+
+    .omission strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; color: #92400e; }
+
+    .ai-summary {
+      background: linear-gradient(135deg, #1e1b3a, #16213e);
+      border: 1px solid #3730a3;
+      border-top: none;
+      border-radius: 0 0 16px 16px;
+      padding: 28px;
+    }
+
+    .ai-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #818cf8;
+      margin-bottom: 16px;
+    }
+
+    .ai-label::before {
+      content: "✦";
+      font-size: 14px;
+    }
+
+    .ai-summary h2 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #e2e8f0;
+    }
+
+    .ai-summary p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+
+    .divergence-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      background: #1e1b3a;
+      border: 1px solid #3730a3;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #a5b4fc;
+    }
+
+    .fact-check-bar {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+
+    .fact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .fact-status {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .fact-text { flex: 1; color: #cbd5e1; }
+
+    .fact-source {
+      font-size: 11px;
+      color: #4b5563;
+      white-space: nowrap;
+    }
+
+    .section-label {
+      max-width: 1000px;
+      margin: 0 auto 14px;
+      padding: 0 24px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #4b5563;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid #1e2535;
+      color: #4b5563;
+      font-size: 13px;
+    }
+
+    footer strong { color: #6366f1; }
+
+    @media (max-width: 768px) {
+      .narratives { grid-template-columns: 1fr; }
+      .narrative { border-right: none; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Narrative<span>Scope</span></div>
+    <div class="badge">Demo · May 29, 2026</div>
+  </header>
+
+  <div class="hero">
+    <h1>One event.<br><em>Three realities.</em></h1>
+    <p>AI tracks how the same event is reported across different media ecosystems — and explains where narratives diverge.</p>
+  </div>
+
+  <div class="event-card">
+    <div class="event-header">
+      <div class="event-icon">⚛️</div>
+      <div class="event-meta">
+        <div class="event-label">Verified Event · Nuclear Safety</div>
+        <div class="event-title">Zaporizhzhia Nuclear Plant: 12-Hour Communication Blackout</div>
+        <div class="event-date">May 27, 2026 — Covered by TASS, Ukrinform, Reuters, BBC</div>
+      </div>
+    </div>
+
+    <div class="narratives">
+
+      <!-- RUSSIAN -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-ru"></div>
+          <div class="source-name">Russian Media</div>
+          <div class="source-tag tag-ru">TASS · RT</div>
+        </div>
+
+        <h3>Reported Facts</h3>
+        <p>IAEA chief Grossi confirmed a ~12-hour blackout at ZNPP and called it "clearly a very concerning event." Communications with the IAEA expert team on-site were cut for many hours.</p>
+
+        <h3>Framing</h3>
+        <ul class="emphasis-list">
+          <li>Cause attributed to a Ukrainian military strike on Energodar that cut power and communications</li>
+          <li>Russia presented as victim protecting nuclear infrastructure</li>
+          <li>Grossi's quote used to validate severity — but cause framed as Ukrainian aggression</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Omits</strong>
+          No independent confirmation that Ukraine caused the blackout. No mention of Russia controlling the plant since 2022.
+        </div>
+      </div>
+
+      <!-- UKRAINIAN -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-ua"></div>
+          <div class="source-name">Ukrainian Media</div>
+          <div class="source-tag tag-ua">Ukrinform · UP</div>
+        </div>
+
+        <h3>Reported Facts</h3>
+        <p>Blackout confirmed. IAEA launched investigation. Separately reported 317 frontline engagements in 24hrs, 66 Russian assaults repelled in Pokrovsk — Russia deployed 8,359 kamikaze drones.</p>
+
+        <h3>Framing</h3>
+        <ul class="emphasis-list">
+          <li>Blackout framed as consequence of Russian occupation of the plant</li>
+          <li>All Russian offensive actions described as "attempted," "stopped," or "repelled"</li>
+          <li>Zero territorial changes acknowledged — narrative of full Ukrainian resistance</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Omits</strong>
+          No alternative explanation for the blackout's cause. Frontline figures are self-reported by Ukraine's General Staff — unverified externally.
+        </div>
+      </div>
+
+      <!-- WESTERN -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-west"></div>
+          <div class="source-name">Western Media</div>
+          <div class="source-tag tag-west">BBC · Reuters · AP</div>
+        </div>
+
+        <h3>Reported Facts</h3>
+        <p>IAEA confirmed the blackout and announced an investigation. Grossi's statement quoted directly. Cause described as "under investigation" — no definitive attribution.</p>
+
+        <h3>Framing</h3>
+        <ul class="emphasis-list">
+          <li>Focused on nuclear safety risk and IAEA process</li>
+          <li>Both sides' claims presented without endorsing either</li>
+          <li>Context: plant has been under Russian military control since March 2022</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Omits</strong>
+          Less granular on frontline developments compared to Ukrainian sources. Thin on local civilian impact in Energodar.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ai-summary">
+      <div class="ai-label">Gemini AI · Narrative Analysis</div>
+      <h2>Where the narratives diverge</h2>
+      <p>
+        All three media ecosystems reported the <strong>same IAEA statement</strong> by Director General Grossi — making this event a rare convergence point. However, they diverge sharply on one question: <em>who caused the blackout?</em>
+      </p>
+      <p>
+        Russian state media (TASS, RT) attributed the outage to a Ukrainian military strike on Energodar — a claim not independently verified by any external source. Ukrainian media focused on the operational context of Russian occupation without directly addressing the IAEA investigation's cause. Western outlets treated attribution as an open question, anchoring coverage in the IAEA process rather than either side's claim.
+      </p>
+      <p>
+        The structural asymmetry is notable: <strong>Russia controls the plant</strong>, yet frames itself as victim of Ukrainian sabotage. Ukraine reports intense frontline activity (317 engagements, 8,359 drones) but describes all outcomes as defensive wins. Western media — constrained by access limitations — relied on institutional sources (IAEA, embassies) rather than ground reporting.
+      </p>
+      <div class="divergence-pills">
+        <span class="pill">Causal attribution disputed</span>
+        <span class="pill">Occupier vs. defender framing</span>
+        <span class="pill">Civilian impact underreported</span>
+        <span class="pill">IAEA as shared anchor</span>
+        <span class="pill">Frontline figures unverifiable</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Fact Verification · AI Cross-Check</div>
+  <div class="fact-check-bar">
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">IAEA chief Grossi confirmed ~12-hour blackout, calling it "clearly a very concerning event in terms of nuclear safety and security"</div>
+      <div class="fact-source">Verified 3/3 sources</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Lavrov–Rubio call (May 26): Lavrov warned of "systematic strikes" on Kyiv decision-making centers, urged evacuation of foreign nationals</div>
+      <div class="fact-source">Verified 2/3 sources</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">317 frontline engagements in 24hrs (May 28) — Ukraine General Staff official report</div>
+      <div class="fact-source">Verified 3/3 sources</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">❌</div>
+      <div class="fact-text">Claim: "Ukrainian drones struck an education facility in Sumy" — attributed to TASS</div>
+      <div class="fact-source">Refuted 3/3 sources</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">❌</div>
+      <div class="fact-text">Claim: "Russia liberated 20 communities in 72 hours" — anonymous Telegram channel</div>
+      <div class="fact-source">Refuted 3/3 sources</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">⚠️</div>
+      <div class="fact-text">GUR intercept showing Russian friendly-fire casualties in Oleksandrivka sector</div>
+      <div class="fact-source">Unverified · single source</div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>NarrativeScope</strong> · Powered by Gemini 2.5 Pro + Vertex AI Embeddings · Built on Google Cloud</p>
+    <p style="margin-top:8px">This is a prototype demo. Sources: TASS, RT, Ukrinform, BBC, Reuters — May 27–29, 2026.</p>
+  </footer>
+
+</body>
+</html>

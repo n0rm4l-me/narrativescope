@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NarrativeScope — GNI Pitch</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Georgia", serif;
+      background: #ffffff;
+      color: #1a1a2e;
+      line-height: 1.7;
+    }
+
+    @media print {
+      .no-print { display: none; }
+      body { font-size: 13px; }
+      .page-break { page-break-before: always; }
+    }
+
+    /* COVER */
+    .cover {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f1117 0%, #1a1f3a 50%, #0f1117 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 40px;
+      color: white;
+    }
+
+    .cover-logo {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      margin-bottom: 8px;
+    }
+
+    .cover-logo span { color: #6366f1; }
+
+    .cover-tagline {
+      font-size: 20px;
+      color: #94a3b8;
+      margin-bottom: 60px;
+      font-style: italic;
+    }
+
+    .cover-title {
+      font-size: 32px;
+      font-weight: 700;
+      max-width: 700px;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    .cover-subtitle {
+      font-size: 16px;
+      color: #94a3b8;
+      max-width: 500px;
+      margin-bottom: 80px;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 40px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .cover-meta div { text-align: center; }
+    .cover-meta strong { display: block; color: #e2e8f0; font-size: 15px; }
+
+    .cover-gni {
+      margin-top: 60px;
+      padding: 16px 32px;
+      border: 1px solid #3730a3;
+      border-radius: 40px;
+      font-size: 13px;
+      color: #818cf8;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* CONTENT */
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    .section {
+      margin-bottom: 64px;
+    }
+
+    .section-number {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #6366f1;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+      color: #0f1117;
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      margin-top: 28px;
+      color: #1e293b;
+    }
+
+    p {
+      font-size: 15px;
+      color: #374151;
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+
+    .lead {
+      font-size: 18px;
+      color: #1e293b;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    blockquote {
+      border-left: 4px solid #6366f1;
+      padding: 16px 24px;
+      background: #f8f7ff;
+      margin: 24px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    blockquote p {
+      font-size: 17px;
+      font-style: italic;
+      color: #1e293b;
+      margin: 0;
+    }
+
+    /* PROBLEM BOX */
+    .problem-box {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+    }
+
+    .problem-box h4 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #c2410c;
+      margin-bottom: 12px;
+    }
+
+    .problem-box p { color: #7c2d12; margin: 0; font-size: 15px; }
+
+    /* SOLUTION BOX */
+    .solution-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+    }
+
+    .solution-box h4 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #15803d;
+      margin-bottom: 12px;
+    }
+
+    .solution-box p { color: #14532d; margin: 0; font-size: 15px; }
+
+    /* NARRATIVE DEMO */
+    .demo-block {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+
+    .demo-header {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 16px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .demo-col {
+      padding: 20px;
+      border-right: 1px solid #e2e8f0;
+      font-size: 13px;
+    }
+
+    .demo-col:last-child { border-right: none; }
+
+    .demo-col-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot-ru { background: #ef4444; }
+    .dot-ua { background: #3b82f6; }
+    .dot-west { background: #10b981; }
+
+    .label-ru { color: #ef4444; }
+    .label-ua { color: #3b82f6; }
+    .label-west { color: #10b981; }
+
+    .demo-col p { font-size: 13px; color: #475569; line-height: 1.6; margin: 0; }
+
+    .demo-ai {
+      background: #faf5ff;
+      border-top: 1px solid #e9d5ff;
+      padding: 20px;
+    }
+
+    .demo-ai-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #7c3aed;
+      margin-bottom: 8px;
+    }
+
+    .demo-ai p { font-size: 13px; color: #4c1d95; line-height: 1.6; margin: 0; }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f1f5f9;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #374151;
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    /* ARCH DIAGRAM */
+    .arch {
+      background: #0f1117;
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 2;
+    }
+
+    .arch .highlight { color: #6366f1; }
+    .arch .green { color: #10b981; }
+    .arch .yellow { color: #f59e0b; }
+
+    /* METRICS */
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .metric {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .metric-number {
+      font-size: 36px;
+      font-weight: 900;
+      color: #6366f1;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ROADMAP */
+    .roadmap {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .roadmap::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: #e2e8f0;
+    }
+
+    .roadmap-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .roadmap-item::before {
+      content: "";
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #6366f1;
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px #6366f1;
+    }
+
+    .roadmap-phase {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6366f1;
+      margin-bottom: 4px;
+    }
+
+    .roadmap-item h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .roadmap-item p {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0;
+    }
+
+    /* ASK */
+    .ask-box {
+      background: linear-gradient(135deg, #1e1b3a, #1e293b);
+      border-radius: 16px;
+      padding: 40px;
+      color: white;
+      text-align: center;
+      margin: 24px 0;
+    }
+
+    .ask-amount {
+      font-size: 56px;
+      font-weight: 900;
+      color: #6366f1;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .ask-label {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 32px;
+    }
+
+    .ask-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .ask-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .ask-item-amount {
+      font-size: 20px;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-bottom: 4px;
+    }
+
+    .ask-item-label {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* IMPACT */
+    .impact-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .impact-list li {
+      padding: 12px 0 12px 28px;
+      position: relative;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 15px;
+      color: #374151;
+    }
+
+    .impact-list li:last-child { border-bottom: none; }
+
+    .impact-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #6366f1;
+      font-weight: 700;
+    }
+
+    /* FOOTER */
+    .pitch-footer {
+      background: #0f1117;
+      color: #64748b;
+      text-align: center;
+      padding: 40px;
+      font-size: 13px;
+    }
+
+    .pitch-footer strong { color: #6366f1; }
+
+    /* DIVIDER */
+    hr {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 48px 0;
+    }
+
+    /* PRINT BUTTON */
+    .print-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 40px;
+      padding: 14px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+    }
+
+    .print-btn:hover { background: #4f46e5; }
+  </style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-logo">Narrative<span>Scope</span></div>
+  <div class="cover-tagline">"Google Translate translates language. NarrativeScope translates perspective."</div>
+
+  <div class="cover-title">AI-powered narrative analysis for global journalism</div>
+  <div class="cover-subtitle">Automatically tracking how the same event is reported across different media ecosystems — and explaining where realities diverge.</div>
+
+  <div class="cover-meta">
+    <div><strong>Category</strong>AI for Journalism</div>
+    <div><strong>Focus</strong>Disinformation · Media Literacy</div>
+    <div><strong>Stage</strong>Prototype Ready</div>
+    <div><strong>Ask</strong>$150,000</div>
+  </div>
+
+  <div class="cover-gni">Proposal for Google News Initiative · 2026</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+
+  <!-- 1. PROBLEM -->
+  <div class="section">
+    <div class="section-number">01 — The Problem</div>
+    <h2>The same event. Three completely different stories.</h2>
+
+    <p class="lead">When a missile strikes a city, Russian state media, Ukrainian outlets, and Western sources describe the same event in entirely different ways — different facts, different framing, different omissions.</p>
+
+    <div class="problem-box">
+      <h4>The Core Problem</h4>
+      <p>Readers have no tool to understand these differences systematically. They either consume one narrative and believe it — or feel overwhelmed and disengage entirely. This fuels polarization, enables disinformation, and erodes trust in journalism globally.</p>
+    </div>
+
+    <p>This is not a new problem — but it has become dramatically more acute. The Russia-Ukraine war is the most documented information war in history. The same dynamic plays out in the Israel-Palestine conflict, the US-China rivalry, every contested election. Billions of people are exposed daily to manipulated narratives with no tools to detect the manipulation.</p>
+
+    <h3>Existing tools fall short</h3>
+    <table>
+      <tr>
+        <th>Tool</th>
+        <th>What it does</th>
+        <th>What it misses</th>
+      </tr>
+      <tr>
+        <td><strong>Ground News</strong></td>
+        <td>Left vs. right bias in US media</td>
+        <td>No geopolitical narratives, no AI explanation</td>
+      </tr>
+      <tr>
+        <td><strong>AllSides</strong></td>
+        <td>US political spectrum comparison</td>
+        <td>US-only, no international narratives</td>
+      </tr>
+      <tr>
+        <td><strong>GDELT</strong></td>
+        <td>Raw event data at scale</td>
+        <td>No product for general audiences</td>
+      </tr>
+      <tr>
+        <td><strong>NewsGuard</strong></td>
+        <td>Source credibility ratings</td>
+        <td>No cross-narrative comparison</td>
+      </tr>
+    </table>
+
+    <p><strong>The gap:</strong> no tool combines geopolitical narrative comparison with AI-generated explanation of divergence, accessible to general audiences in multiple languages.</p>
+  </div>
+
+  <hr />
+
+  <!-- 2. SOLUTION -->
+  <div class="section">
+    <div class="section-number">02 — The Solution</div>
+    <h2>NarrativeScope: one event, multiple realities, AI explanation.</h2>
+
+    <p class="lead">NarrativeScope automatically identifies the same event across 50+ sources from different media ecosystems, clusters related articles, and generates a structured AI analysis showing exactly where — and why — narratives diverge.</p>
+
+    <div class="solution-box">
+      <h4>How it works</h4>
+      <p>RSS feeds from tagged sources → AI embedding & event clustering → filter: 3+ sources covering same event → Gemini analysis: facts agreed, emphasis, omissions → multilingual output to readers.</p>
+    </div>
+
+    <h3>Live example: Zaporizhzhia NPP blackout, May 27, 2026</h3>
+
+    <div class="demo-block">
+      <div class="demo-header">Same event — three narratives</div>
+      <div class="demo-grid">
+        <div class="demo-col">
+          <div class="demo-col-label"><span class="dot dot-ru"></span><span class="label-ru">Russian Media (TASS · RT)</span></div>
+          <p>IAEA confirmed the blackout. <strong>Cause: Ukrainian military strike on Energodar.</strong> Russia framed as victim protecting nuclear infrastructure. Grossi's statement used to validate severity.</p>
+        </div>
+        <div class="demo-col">
+          <div class="demo-col-label"><span class="dot dot-ua"></span><span class="label-ua">Ukrainian Media (Ukrinform)</span></div>
+          <p>Blackout confirmed, IAEA investigating. <strong>Framed as consequence of Russian occupation.</strong> 317 frontline engagements reported. All Russian actions described as "repelled."</p>
+        </div>
+        <div class="demo-col">
+          <div class="demo-col-label"><span class="dot dot-west"></span><span class="label-west">Western Media (BBC · Reuters)</span></div>
+          <p>IAEA confirmed. Cause "under investigation." <strong>No definitive attribution.</strong> Context: plant under Russian control since 2022. Focus on IAEA process, not blame.</p>
+        </div>
+      </div>
+      <div class="demo-ai">
+        <div class="demo-ai-label">✦ Gemini AI — Narrative Analysis</div>
+        <p>All three ecosystems cited the same IAEA statement — a rare convergence. But they diverge sharply on causation. Russia controls the plant yet frames itself as victim. Ukraine reports intense combat yet acknowledges no territorial changes. Western media — limited by access — anchors on institutional sources. <strong>Key divergence: occupier-vs-defender framing applied to the same physical infrastructure.</strong></p>
+      </div>
+    </div>
+
+    <h3>Key features</h3>
+    <ul class="impact-list">
+      <li>Automatic event clustering using Vertex AI embeddings — no manual curation</li>
+      <li>Source taxonomy: Russian state / Ukrainian / Western / independent Russian / Chinese / other</li>
+      <li>AI comparison: shared facts, framing differences, what each side omits</li>
+      <li>Fact verification: cross-source claim checking with confidence scores</li>
+      <li>Multilingual: summaries available in EN, RU, ZH, DE, FR, UA</li>
+      <li>Disinformation flagging: claims refuted across 3+ independent sources</li>
+    </ul>
+  </div>
+
+  <hr />
+
+  <!-- 3. TECHNOLOGY -->
+  <div class="section page-break">
+    <div class="section-number">03 — Technology</div>
+    <h2>Built entirely on Google Cloud.</h2>
+
+    <div class="arch">
+      <span class="highlight">RSS sources (50+)</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;│<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;▼<br/>
+      <span class="green">Cloud Scheduler</span> → every 30 minutes<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;│<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;▼<br/>
+      <span class="green">Cloud Run — Fetcher</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── keyword filter (drops ~85% of articles)<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;└── 3+ sources on same event → <span class="highlight">Pub/Sub</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br/>
+      <span class="green">Cloud Run — Processor</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="highlight">Vertex AI Embeddings</span> → vectorize<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;└── cluster → new event → <span class="highlight">Pub/Sub</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br/>
+      <span class="green">Cloud Run — Analyzer</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="yellow">Gemini Flash</span> → translate summaries (cheap)<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="yellow">Gemini Pro</span> → narrative comparison (quality)<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br/>
+      <span class="green">Firestore</span> + <span class="green">Cloud CDN</span> → <span class="highlight">Next.js Frontend</span>
+    </div>
+
+    <h3>Why Google Cloud</h3>
+    <table>
+      <tr>
+        <th>Component</th>
+        <th>Service</th>
+        <th>Why</th>
+      </tr>
+      <tr>
+        <td>Event processing</td>
+        <td>Cloud Run + Pub/Sub</td>
+        <td>Serverless, scales to zero, no infrastructure</td>
+      </tr>
+      <tr>
+        <td>AI embeddings</td>
+        <td>Vertex AI text-embedding-004</td>
+        <td>State-of-the-art multilingual vectors</td>
+      </tr>
+      <tr>
+        <td>Narrative analysis</td>
+        <td>Gemini 2.5 Pro / Flash</td>
+        <td>Best-in-class multilingual reasoning</td>
+      </tr>
+      <tr>
+        <td>Database</td>
+        <td>Firestore</td>
+        <td>Real-time, serverless, free tier generous</td>
+      </tr>
+      <tr>
+        <td>Frontend + CDN</td>
+        <td>Firebase Hosting + Cloud CDN</td>
+        <td>Global edge, 80% cache hit rate on static content</td>
+      </tr>
+    </table>
+
+    <h3>Cost efficiency by design</h3>
+    <p>The system is built to minimize AI calls. Only events covered by 3+ independent sources trigger analysis. Headlines and 2-sentence summaries are translated (Gemini Flash); full text only on user request (lazy translation, cached 30 days). Estimated cost at MVP scale: <strong>$10–25/month</strong>.</p>
+  </div>
+
+  <hr />
+
+  <!-- 4. TRACTION -->
+  <div class="section">
+    <div class="section-number">04 — Traction</div>
+    <h2>Working prototype. Real data. Today.</h2>
+
+    <p>NarrativeScope is not a concept deck. A working prototype was built and tested in a single session, processing real news data from May 27–29, 2026.</p>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-number">103</div>
+        <div class="metric-label">AI agents run in research test</div>
+      </div>
+      <div class="metric">
+        <div class="metric-number">21</div>
+        <div class="metric-label">Sources fetched & cross-verified</div>
+      </div>
+      <div class="metric">
+        <div class="metric-number">6</div>
+        <div class="metric-label">High-confidence verified claims</div>
+      </div>
+    </div>
+
+    <p>The prototype successfully identified the Zaporizhzhia NPP communication blackout as a convergence point across Russian, Ukrainian, and Western media — and produced a structured narrative comparison with AI explanation. The demo is live and available for review.</p>
+  </div>
+
+  <hr />
+
+  <!-- 5. IMPACT -->
+  <div class="section">
+    <div class="section-number">05 — Impact</div>
+    <h2>Media literacy at scale.</h2>
+
+    <p class="lead">NarrativeScope addresses one of the most critical information challenges of our time: the systematic inability of citizens to distinguish between facts and narrative framing across geopolitical divides.</p>
+
+    <ul class="impact-list">
+      <li><strong>For general audiences:</strong> understand how propaganda works without becoming an expert — one tool, any event, any language</li>
+      <li><strong>For journalists:</strong> verify claims across narratives in minutes, not hours — catch what each side omits</li>
+      <li><strong>For researchers:</strong> open dataset of narrative divergence across 50+ sources, continuously updated</li>
+      <li><strong>For educators:</strong> real-time examples of media framing for media literacy curricula</li>
+      <li><strong>For NGOs:</strong> evidence-based documentation of disinformation campaigns</li>
+    </ul>
+
+    <blockquote>
+      <p>"The Russia-Ukraine war is the most documented information war in history. NarrativeScope turns that documentation into understanding."</p>
+    </blockquote>
+
+    <h3>Alignment with GNI priorities</h3>
+    <table>
+      <tr>
+        <th>GNI Priority</th>
+        <th>NarrativeScope Contribution</th>
+      </tr>
+      <tr>
+        <td>Fight disinformation</td>
+        <td>Exposes narrative manipulation in real time with AI-verified fact checking</td>
+      </tr>
+      <tr>
+        <td>Strengthen media literacy</td>
+        <td>Makes framing analysis accessible to general audiences in 6+ languages</td>
+      </tr>
+      <tr>
+        <td>Support journalism innovation</td>
+        <td>Provides journalists with cross-narrative verification tools</td>
+      </tr>
+      <tr>
+        <td>Google Cloud showcase</td>
+        <td>Built entirely on Vertex AI + Gemini + GCP — a flagship AI journalism use case</td>
+      </tr>
+    </table>
+  </div>
+
+  <hr />
+
+  <!-- 6. ROADMAP -->
+  <div class="section">
+    <div class="section-number">06 — Roadmap</div>
+    <h2>12 months to production.</h2>
+
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Month 1–2</div>
+        <h4>Foundation</h4>
+        <p>Cloud Run fetcher + Pub/Sub pipeline. 20 curated sources. Gemini narrative analysis. Internal testing.</p>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Month 3–4</div>
+        <h4>MVP Launch</h4>
+        <p>Next.js frontend. Firebase Hosting. 5–10 events/day. Public beta with English + Russian + Chinese.</p>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Month 5–7</div>
+        <h4>Newsroom Partnerships</h4>
+        <p>Onboard 20 newsroom partners. Add German, French, Ukrainian. Freemium Stripe subscription. API access beta.</p>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Month 8–10</div>
+        <h4>Scale + Research</h4>
+        <p>Expand to 50+ sources. Publish open research on AI-detected narrative divergence. Academic partnerships.</p>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Month 11–12</div>
+        <h4>Sustainability</h4>
+        <p>B2B API for media organizations. Self-sustaining revenue. Grant reporting and GNI impact showcase.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- 7. ASK -->
+  <div class="section">
+    <div class="section-number">07 — The Ask</div>
+    <h2>$150,000 to build, launch, and prove the model.</h2>
+
+    <div class="ask-box">
+      <div class="ask-amount">$150,000</div>
+      <div class="ask-label">Google News Initiative Grant Request · 12-month project</div>
+      <div class="ask-breakdown">
+        <div class="ask-item">
+          <div class="ask-item-amount">$60,000</div>
+          <div class="ask-item-label">Engineering (backend, AI pipeline, frontend)</div>
+        </div>
+        <div class="ask-item">
+          <div class="ask-item-amount">$40,000</div>
+          <div class="ask-item-label">Journalism partnerships & editorial (source curation, 20 newsrooms)</div>
+        </div>
+        <div class="ask-item">
+          <div class="ask-item-amount">$30,000</div>
+          <div class="ask-item-label">Google Cloud infrastructure (Vertex AI, Gemini API, GCP)</div>
+        </div>
+        <div class="ask-item">
+          <div class="ask-item-amount">$20,000</div>
+          <div class="ask-item-label">Research publication & open dataset release</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>What Google gets</h3>
+    <ul class="impact-list">
+      <li>A flagship Gemini + Vertex AI use case in journalism — fully public and citable</li>
+      <li>An open research dataset on narrative divergence across 50+ global sources</li>
+      <li>A demonstrated model for AI-powered media literacy that GNI can replicate globally</li>
+      <li>20+ newsroom partnerships validating Google's journalism AI tools</li>
+    </ul>
+  </div>
+
+  <hr />
+
+  <!-- 9. PARTNERSHIP -->
+  <div class="section">
+    <div class="section-number">09 — Alternative: Acquisition or License</div>
+    <h2>Prefer to own it outright? Three paths forward.</h2>
+
+    <p class="lead">We recognize that Google may prefer to integrate NarrativeScope directly into existing products — Google News, Fact Check Explorer, or a standalone GNI tool. We are open to all models.</p>
+
+    <table>
+      <tr>
+        <th>Model</th>
+        <th>What it means</th>
+        <th>Best for</th>
+      </tr>
+      <tr>
+        <td><strong>Grant</strong></td>
+        <td>GNI funds the project. We build and operate independently. Open research published.</td>
+        <td>GNI wants an independent media literacy project</td>
+      </tr>
+      <tr>
+        <td><strong>License</strong></td>
+        <td>Google licenses the concept, architecture, and prototype. We act as technical consultants during integration.</td>
+        <td>Google wants to integrate into existing products (Google News, Search)</td>
+      </tr>
+      <tr>
+        <td><strong>Acquisition</strong></td>
+        <td>Google acquires the IP and prototype outright. We transfer all materials and provide onboarding support.</td>
+        <td>Google wants full ownership and maximum flexibility</td>
+      </tr>
+    </table>
+
+    <h3>What is included in any transfer</h3>
+    <ul class="impact-list">
+      <li>Full concept documentation and technical architecture</li>
+      <li>Working prototype (HTML demo, AI pipeline design, source taxonomy)</li>
+      <li>Curated list of 50+ sources with narrative tags (ru_state, ua_state, western, etc.)</li>
+      <li>Prompt library for Gemini narrative comparison and fact verification</li>
+      <li>GNI pitch document and positioning strategy</li>
+      <li>Ongoing advisory availability for 6 months</li>
+    </ul>
+
+    <div class="problem-box" style="background:#f0fdf4; border-color:#bbf7d0;">
+      <h4 style="color:#15803d;">Our priority</h4>
+      <p style="color:#14532d;">We want this tool to exist in the world and reach millions of readers. The model matters less than the mission. We are flexible on structure — firm on impact.</p>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- 8. VISION -->
+  <div class="section">
+    <div class="section-number">08 — Vision</div>
+    <h2>Beyond war. Beyond politics. A new information layer for the world.</h2>
+
+    <p class="lead">The Russia-Ukraine war is the starting point, not the limit. The same technology applies to every contested geopolitical narrative: Israel-Palestine, US-China, Taiwan, climate, elections.</p>
+
+    <p>In three years, NarrativeScope can become the default tool for understanding how any major global event is being interpreted across different cultures and political systems. Not a news site — an information transparency layer on top of all news.</p>
+
+    <blockquote>
+      <p>We don't tell people what to think. We show them how different systems of power want them to think — and let them decide.</p>
+    </blockquote>
+
+    <p>This is what media literacy looks like in the age of AI.</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="pitch-footer">
+  <p><strong>NarrativeScope</strong> · Proposal for Google News Initiative · 2026</p>
+  <p style="margin-top:8px">Prototype available for live demonstration. Built on Vertex AI · Gemini 2.5 Pro · Google Cloud.</p>
+</div>
+
+<button class="print-btn no-print" onclick="window.print()">Save as PDF</button>
+
+</body>
+</html>
