@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NarrativeScope — 演示</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 24px 40px;
+      border-bottom: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .logo span { color: #6366f1; }
+
+    .badge {
+      background: #1e2535;
+      border: 1px solid #2d3748;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 40px 40px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #6366f1, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      font-size: 16px;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .event-card {
+      max-width: 1000px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+
+    .event-header {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .event-icon { font-size: 28px; line-height: 1; margin-top: 2px; }
+    .event-meta { flex: 1; }
+
+    .event-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6366f1;
+      margin-bottom: 6px;
+    }
+
+    .event-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .event-date { font-size: 13px; color: #64748b; }
+
+    .narratives {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-left: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative {
+      padding: 24px;
+      border-bottom: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative:last-child { border-right: none; }
+
+    .narrative-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .source-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-ru { background: #ef4444; }
+    .dot-ua { background: #3b82f6; }
+    .dot-west { background: #10b981; }
+
+    .source-name { font-size: 13px; font-weight: 700; letter-spacing: 0.5px; }
+
+    .source-tag {
+      font-size: 11px;
+      background: #1e2535;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-left: auto;
+    }
+
+    .tag-ru { color: #f87171; background: #2d1515; }
+    .tag-ua { color: #60a5fa; background: #0f1f35; }
+    .tag-west { color: #34d399; background: #0d2420; }
+
+    .narrative h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .narrative p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+
+    .emphasis-list { list-style: none; margin-bottom: 16px; }
+
+    .emphasis-list li {
+      font-size: 13px;
+      color: #94a3b8;
+      padding: 4px 0 4px 16px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .emphasis-list li::before { content: "→"; position: absolute; left: 0; color: #4b5563; }
+
+    .omission {
+      background: #1a1205;
+      border: 1px solid #44320a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #d97706;
+      line-height: 1.6;
+    }
+
+    .omission strong {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      color: #92400e;
+    }
+
+    .ai-summary {
+      background: linear-gradient(135deg, #1e1b3a, #16213e);
+      border: 1px solid #3730a3;
+      border-top: none;
+      border-radius: 0 0 16px 16px;
+      padding: 28px;
+    }
+
+    .ai-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #818cf8;
+      margin-bottom: 16px;
+    }
+
+    .ai-label::before { content: "✦"; font-size: 14px; }
+
+    .ai-summary h2 { font-size: 17px; font-weight: 700; margin-bottom: 12px; color: #e2e8f0; }
+
+    .ai-summary p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+
+    .divergence-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+    .pill {
+      background: #1e1b3a;
+      border: 1px solid #3730a3;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #a5b4fc;
+    }
+
+    .fact-check-bar {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+
+    .fact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .fact-status { font-size: 16px; flex-shrink: 0; }
+    .fact-text { flex: 1; color: #cbd5e1; line-height: 1.6; }
+    .fact-source { font-size: 11px; color: #4b5563; white-space: nowrap; }
+
+    .section-label {
+      max-width: 1000px;
+      margin: 0 auto 14px;
+      padding: 0 24px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #4b5563;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid #1e2535;
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    footer strong { color: #6366f1; }
+
+    @media (max-width: 768px) {
+      .narratives { grid-template-columns: 1fr; }
+      .narrative { border-right: none; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Narrative<span>Scope</span></div>
+    <div class="badge">演示 · 2026年5月29日</div>
+  </header>
+
+  <div class="hero">
+    <h1>同一事件。<br><em>三种现实。</em></h1>
+    <p>人工智能追踪同一事件在不同媒体生态系统中的报道方式，并解释叙事分歧所在。</p>
+  </div>
+
+  <div class="event-card">
+    <div class="event-header">
+      <div class="event-icon">⚛️</div>
+      <div class="event-meta">
+        <div class="event-label">已核实事件 · 核安全</div>
+        <div class="event-title">扎波罗热核电站：12小时通讯中断</div>
+        <div class="event-date">2026年5月27日 — 来源：塔斯社、乌克兰国际通讯社、路透社、BBC</div>
+      </div>
+    </div>
+
+    <div class="narratives">
+
+      <!-- 俄罗斯 -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-ru"></div>
+          <div class="source-name">俄罗斯媒体</div>
+          <div class="source-tag tag-ru">塔斯社 · RT</div>
+        </div>
+
+        <h3>报道事实</h3>
+        <p>国际原子能机构总干事格罗西证实核电站发生约12小时的通讯中断，称其为"核安全与核保障方面明显令人担忧的事件"。机构驻场专家组与外界失联数小时。</p>
+
+        <h3>报道框架</h3>
+        <ul class="emphasis-list">
+          <li>将原因归咎于乌克兰军队袭击能源城，导致电力和通讯中断</li>
+          <li>俄罗斯被塑造为保护核基础设施的受害方</li>
+          <li>引用格罗西声明以佐证事件严重性，但将起因定性为乌克兰侵略行为</li>
+        </ul>
+
+        <div class="omission">
+          <strong>刻意回避</strong>
+          无独立证据证明乌克兰是此次中断的原因。未提及俄罗斯自2022年起控制该核电站这一背景。
+        </div>
+      </div>
+
+      <!-- 乌克兰 -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-ua"></div>
+          <div class="source-name">乌克兰媒体</div>
+          <div class="source-tag tag-ua">乌克兰国际通讯社 · 乌克兰真相报</div>
+        </div>
+
+        <h3>报道事实</h3>
+        <p>通讯中断获证实，国际原子能机构启动调查。另据报道，24小时内发生317次前线交火，波克罗夫斯克方向击退66次俄军突击，俄方出动8,359架自杀式无人机。</p>
+
+        <h3>报道框架</h3>
+        <ul class="emphasis-list">
+          <li>将通讯中断定性为俄罗斯占领核电站的后果</li>
+          <li>所有俄军进攻行动均以"企图"、"被阻止"或"被击退"描述</li>
+          <li>不承认任何领土变化——以乌克兰全面抵抗为核心叙事</li>
+        </ul>
+
+        <div class="omission">
+          <strong>刻意回避</strong>
+          未对通讯中断的原因提供其他解释。前线数据为乌克兰总参谋部单方面报告，缺乏外部核实。
+        </div>
+      </div>
+
+      <!-- 西方 -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-west"></div>
+          <div class="source-name">西方媒体</div>
+          <div class="source-tag tag-west">BBC · 路透社 · 美联社</div>
+        </div>
+
+        <h3>报道事实</h3>
+        <p>国际原子能机构证实通讯中断并宣布展开调查，直接引述格罗西声明。原因被描述为"正在调查中"，未作任何定性归因。</p>
+
+        <h3>报道框架</h3>
+        <ul class="emphasis-list">
+          <li>聚焦核安全风险及国际原子能机构的应对程序</li>
+          <li>呈现双方立场，不偏向任何一方</li>
+          <li>背景说明：该核电站自2022年3月起处于俄罗斯军事控制之下</li>
+        </ul>
+
+        <div class="omission">
+          <strong>刻意回避</strong>
+          与乌克兰媒体相比，前线动态细节较少。对能源城当地平民影响的报道极为有限。
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ai-summary">
+      <div class="ai-label">Gemini AI · 叙事分析</div>
+      <h2>叙事分歧所在</h2>
+      <p>
+        三大媒体生态系统均援引了国际原子能机构总干事格罗西的<strong>同一份声明</strong>——这是罕见的共同锚点。然而，围绕一个核心问题，各方出现了尖锐分歧：<em>通讯中断究竟由谁造成？</em>
+      </p>
+      <p>
+        俄罗斯官方媒体（塔斯社、RT）将停电归咎于乌克兰军队袭击能源城——这一说法未获任何独立来源证实。乌克兰媒体则着重强调俄罗斯占领的背景，并未直接回应国际原子能机构对原因的调查。西方媒体将归因问题悬而未决，报道以国际原子能机构的立场为主轴，而非任何一方的声明。
+      </p>
+      <p>
+        结构性不对称尤为值得关注：<strong>俄罗斯控制核电站</strong>，却将自身塑造为遭受乌克兰蓄意破坏的受害方。乌克兰报告高强度战斗（317次交火、8,359架无人机），并将所有结果定性为防御胜利。西方媒体受制于实地访问限制，主要依赖机构来源（国际原子能机构、各国使馆），而非现场报道。
+      </p>
+      <div class="divergence-pills">
+        <span class="pill">原因归属存争议</span>
+        <span class="pill">占领者与捍卫者叙事对立</span>
+        <span class="pill">平民伤亡报道不足</span>
+        <span class="pill">国际原子能机构为共同锚点</span>
+        <span class="pill">前线数据无法独立核实</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">事实核查 · AI 交叉验证</div>
+  <div class="fact-check-bar">
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">国际原子能机构总干事格罗西证实约12小时通讯中断，称其为"核安全与核保障方面明显令人担忧的事件"</div>
+      <div class="fact-source">3/3来源证实</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">拉夫罗夫与鲁比奥通话（5月26日）：拉夫罗夫警告将对基辅"决策中心"实施"系统性打击"，并敦促外国公民撤离</div>
+      <div class="fact-source">2/3来源证实</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">24小时内发生317次前线交火（5月28日）——乌克兰总参谋部官方报告</div>
+      <div class="fact-source">3/3来源证实</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">❌</div>
+      <div class="fact-text">声称"乌克兰无人机袭击苏梅一处教育设施"——来源归为塔斯社</div>
+      <div class="fact-source">3/3来源驳斥</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">❌</div>
+      <div class="fact-text">声称"俄罗斯72小时内解放20个定居点"——来自匿名Telegram频道</div>
+      <div class="fact-source">3/3来源驳斥</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">⚠️</div>
+      <div class="fact-text">乌克兰军事情报总局截获通话，显示俄军在亚历山德里夫卡方向存在误伤伤亡</div>
+      <div class="fact-source">未核实 · 单一来源</div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>NarrativeScope</strong> · 基于 Gemini 2.5 Pro + Vertex AI 向量嵌入 · 构建于 Google Cloud</p>
+    <p style="margin-top:8px">本页为原型演示。来源：塔斯社、RT、乌克兰国际通讯社、BBC、路透社 — 2026年5月27–29日。</p>
+  </footer>
+
+</body>
+</html>

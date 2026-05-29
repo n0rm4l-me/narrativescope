@@ -8,11 +8,11 @@ AI-powered tool that tracks how the same geopolitical event is reported across d
 
 **[→ View Demo](https://n0rm4l-me.github.io/narrativescope/)**
 
-| Language | Pitch | Demo |
+| Language | Demo | Pitch |
 |---|---|---|
-| English | [pitch-en.html](https://n0rm4l-me.github.io/narrativescope/pitch-en.html) | [index.html](https://n0rm4l-me.github.io/narrativescope/) |
-| Russian | [pitch-ru.html](https://n0rm4l-me.github.io/narrativescope/pitch-ru.html) | — |
-| Chinese | [pitch-zh.html](https://n0rm4l-me.github.io/narrativescope/pitch-zh.html) | — |
+| English | [→ Demo](https://n0rm4l-me.github.io/narrativescope/) | [→ Pitch](https://n0rm4l-me.github.io/narrativescope/pitch-en.html) |
+| Russian / Русский | [→ Демо](https://n0rm4l-me.github.io/narrativescope/demo-ru.html) | [→ Питч](https://n0rm4l-me.github.io/narrativescope/pitch-ru.html) |
+| Chinese / 中文 | [→ 演示](https://n0rm4l-me.github.io/narrativescope/demo-zh.html) | [→ 提案](https://n0rm4l-me.github.io/narrativescope/pitch-zh.html) |
 
 ## The Problem
 

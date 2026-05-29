@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NarrativeScope — Демо</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 24px 40px;
+      border-bottom: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: #6366f1; }
+
+    .badge {
+      background: #1e2535;
+      border: 1px solid #2d3748;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 40px 40px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #6366f1, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      font-size: 16px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .event-card {
+      max-width: 1000px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+
+    .event-header {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .event-icon { font-size: 28px; line-height: 1; margin-top: 2px; }
+    .event-meta { flex: 1; }
+
+    .event-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6366f1;
+      margin-bottom: 6px;
+    }
+
+    .event-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .event-date { font-size: 13px; color: #64748b; }
+
+    .narratives {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-left: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative {
+      padding: 24px;
+      border-bottom: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative:last-child { border-right: none; }
+
+    .narrative-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .source-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-ru { background: #ef4444; }
+    .dot-ua { background: #3b82f6; }
+    .dot-west { background: #10b981; }
+
+    .source-name { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .source-tag {
+      font-size: 11px;
+      color: #64748b;
+      background: #1e2535;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-left: auto;
+    }
+
+    .tag-ru { color: #f87171; background: #2d1515; }
+    .tag-ua { color: #60a5fa; background: #0f1f35; }
+    .tag-west { color: #34d399; background: #0d2420; }
+
+    .narrative h3 {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .narrative p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+
+    .emphasis-list { list-style: none; margin-bottom: 16px; }
+
+    .emphasis-list li {
+      font-size: 13px;
+      color: #94a3b8;
+      padding: 4px 0 4px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .emphasis-list li::before { content: "→"; position: absolute; left: 0; color: #4b5563; }
+
+    .omission {
+      background: #1a1205;
+      border: 1px solid #44320a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #d97706;
+    }
+
+    .omission strong {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      color: #92400e;
+    }
+
+    .ai-summary {
+      background: linear-gradient(135deg, #1e1b3a, #16213e);
+      border: 1px solid #3730a3;
+      border-top: none;
+      border-radius: 0 0 16px 16px;
+      padding: 28px;
+    }
+
+    .ai-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #818cf8;
+      margin-bottom: 16px;
+    }
+
+    .ai-label::before { content: "✦"; font-size: 14px; }
+
+    .ai-summary h2 { font-size: 17px; font-weight: 700; margin-bottom: 12px; color: #e2e8f0; }
+
+    .ai-summary p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+
+    .divergence-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+    .pill {
+      background: #1e1b3a;
+      border: 1px solid #3730a3;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #a5b4fc;
+    }
+
+    .fact-check-bar {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+
+    .fact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .fact-status { font-size: 16px; flex-shrink: 0; }
+    .fact-text { flex: 1; color: #cbd5e1; }
+    .fact-source { font-size: 11px; color: #4b5563; white-space: nowrap; }
+
+    .section-label {
+      max-width: 1000px;
+      margin: 0 auto 14px;
+      padding: 0 24px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #4b5563;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid #1e2535;
+      color: #4b5563;
+      font-size: 13px;
+    }
+
+    footer strong { color: #6366f1; }
+
+    @media (max-width: 768px) {
+      .narratives { grid-template-columns: 1fr; }
+      .narrative { border-right: none; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Narrative<span>Scope</span></div>
+    <div class="badge">Демо · 29 мая 2026</div>
+  </header>
+
+  <div class="hero">
+    <h1>Одно событие.<br><em>Три реальности.</em></h1>
+    <p>ИИ отслеживает, как одно и то же событие освещается в разных медиасистемах — и объясняет, где расходятся нарративы.</p>
+  </div>
+
+  <div class="event-card">
+    <div class="event-header">
+      <div class="event-icon">⚛️</div>
+      <div class="event-meta">
+        <div class="event-label">Подтверждённое событие · Ядерная безопасность</div>
+        <div class="event-title">Запорожская АЭС: 12-часовое отключение связи</div>
+        <div class="event-date">27 мая 2026 — Источники: ТАСС, Укринформ, Reuters, BBC</div>
+      </div>
+    </div>
+
+    <div class="narratives">
+
+      <!-- РОССИЙСКИЙ -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-ru"></div>
+          <div class="source-name">Российские СМИ</div>
+          <div class="source-tag tag-ru">ТАСС · RT</div>
+        </div>
+
+        <h3>Сообщаемые факты</h3>
+        <p>Глава МАГАТЭ Гросси подтвердил ~12-часовое отключение на ЗАЭС и назвал его «явно очень тревожным событием с точки зрения ядерной безопасности». Связь с экспертами МАГАТЭ на объекте была прервана на несколько часов.</p>
+
+        <h3>Подача материала</h3>
+        <ul class="emphasis-list">
+          <li>Причина — удар украинских военных по Энергодару, обесточивший объект</li>
+          <li>Россия представлена жертвой, защищающей ядерную инфраструктуру</li>
+          <li>Цитата Гросси используется для подтверждения серьёзности — но причина подаётся как украинская агрессия</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Умалчивается</strong>
+          Нет независимого подтверждения, что причиной стала Украина. Не упоминается, что Россия контролирует станцию с 2022 года.
+        </div>
+      </div>
+
+      <!-- УКРАИНСКИЙ -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-ua"></div>
+          <div class="source-name">Украинские СМИ</div>
+          <div class="source-tag tag-ua">Укринформ · УП</div>
+        </div>
+
+        <h3>Сообщаемые факты</h3>
+        <p>Отключение подтверждено. МАГАТЭ начало расследование. Отдельно сообщается о 317 столкновениях на фронте за сутки, 66 отражённых атаках в районе Покровска — Россия применила 8 359 дронов-камикадзе.</p>
+
+        <h3>Подача материала</h3>
+        <ul class="emphasis-list">
+          <li>Отключение подаётся как следствие российской оккупации станции</li>
+          <li>Все наступательные действия России описываются как «попытки», «остановленные» или «отражённые»</li>
+          <li>Территориальные изменения не признаются — нарратив полного украинского сопротивления</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Умалчивается</strong>
+          Нет альтернативного объяснения причины отключения. Данные о фронте — самоотчёт Генштаба Украины, внешне не верифицированный.
+        </div>
+      </div>
+
+      <!-- ЗАПАДНЫЙ -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-west"></div>
+          <div class="source-name">Западные СМИ</div>
+          <div class="source-tag tag-west">BBC · Reuters · AP</div>
+        </div>
+
+        <h3>Сообщаемые факты</h3>
+        <p>МАГАТЭ подтвердило отключение и объявило о расследовании. Заявление Гросси цитируется напрямую. Причина описывается как «выясняется» — конкретного виновника не называют.</p>
+
+        <h3>Подача материала</h3>
+        <ul class="emphasis-list">
+          <li>Акцент на риске ядерной безопасности и процедурах МАГАТЭ</li>
+          <li>Позиции обеих сторон изложены без поддержки какой-либо из них</li>
+          <li>Контекст: станция находится под российским военным контролем с марта 2022 года</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Умалчивается</strong>
+          Меньше деталей о ситуации на фронте по сравнению с украинскими источниками. Скудная информация о влиянии на мирных жителей Энергодара.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ai-summary">
+      <div class="ai-label">Gemini AI · Анализ нарративов</div>
+      <h2>Где расходятся нарративы</h2>
+      <p>
+        Все три медиасистемы сослались на <strong>одно и то же заявление МАГАТЭ</strong> генерального директора Гросси — редкая точка сближения. Однако они резко расходятся в ответе на вопрос: <em>кто вызвал отключение?</em>
+      </p>
+      <p>
+        Российские государственные СМИ (ТАСС, RT) приписали сбой удару украинских военных по Энергодару — утверждение, не подтверждённое ни одним независимым источником. Украинские СМИ сосредоточились на контексте российской оккупации, не затрагивая напрямую расследование МАГАТЭ о причинах. Западные издания оставили вопрос об ответственности открытым, построив материал вокруг позиции МАГАТЭ, а не заявлений сторон.
+      </p>
+      <p>
+        Показательна структурная асимметрия: <strong>Россия контролирует станцию</strong>, однако позиционирует себя жертвой украинского саботажа. Украина сообщает об интенсивных боях (317 столкновений, 8 359 дронов), описывая все исходы как оборонительные победы. Западные СМИ — ограниченные в доступе — опирались на институциональные источники (МАГАТЭ, посольства) вместо репортажей с места событий.
+      </p>
+      <div class="divergence-pills">
+        <span class="pill">Причина не установлена</span>
+        <span class="pill">Оккупант vs. защитник</span>
+        <span class="pill">Потери среди мирных занижены</span>
+        <span class="pill">МАГАТЭ — общий якорь</span>
+        <span class="pill">Данные о фронте не верифицированы</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Проверка фактов · Перекрёстный анализ ИИ</div>
+  <div class="fact-check-bar">
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Глава МАГАТЭ Гросси подтвердил ~12-часовое отключение, назвав его «явно очень тревожным событием с точки зрения ядерной безопасности»</div>
+      <div class="fact-source">Подтверждено 3/3 источниками</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Звонок Лавров–Рубио (26 мая): Лавров предупредил об «ударах по центрам принятия решений» в Киеве, призвал иностранцев эвакуироваться</div>
+      <div class="fact-source">Подтверждено 2/3 источниками</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">317 боестолкновений за сутки (28 мая) — официальный отчёт Генштаба Украины</div>
+      <div class="fact-source">Подтверждено 3/3 источниками</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">❌</div>
+      <div class="fact-text">Утверждение: «Украинские дроны нанесли удар по учебному заведению в Сумах» — приписывается ТАСС</div>
+      <div class="fact-source">Опровергнуто 3/3 источниками</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">❌</div>
+      <div class="fact-text">Утверждение: «Россия освободила 20 населённых пунктов за 72 часа» — анонимный Telegram-канал</div>
+      <div class="fact-source">Опровергнуто 3/3 источниками</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">⚠️</div>
+      <div class="fact-text">Перехват ГУР о потерях российских войск от дружественного огня в районе Александровки</div>
+      <div class="fact-source">Не верифицировано · один источник</div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>NarrativeScope</strong> · Работает на Gemini 2.5 Pro + Vertex AI Embeddings · Построено на Google Cloud</p>
+    <p style="margin-top:8px">Это прототип-демо. Источники: ТАСС, RT, Укринформ, BBC, Reuters — 27–29 мая 2026.</p>
+  </footer>
+
+</body>
+</html>
