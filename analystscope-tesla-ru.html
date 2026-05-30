@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AnalystScope — Tesla (TSLA)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 24px 40px;
+      border-bottom: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .logo span { color: #10b981; }
+
+    .badge {
+      background: #1e2535;
+      border: 1px solid #2d3748;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .hero { text-align: center; padding: 60px 40px 40px; }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #10b981, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p { color: #94a3b8; font-size: 16px; max-width: 560px; margin: 0 auto; line-height: 1.7; }
+
+    /* STOCK HEADER */
+    .stock-header {
+      max-width: 1100px;
+      margin: 0 auto 32px;
+      padding: 0 24px;
+      display: flex;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .stock-info {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 24px 28px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .stock-ticker {
+      font-size: 42px;
+      font-weight: 900;
+      color: #e2e8f0;
+      letter-spacing: -2px;
+    }
+
+    .stock-name { font-size: 14px; color: #64748b; margin-top: 4px; }
+
+    .stock-price {
+      font-size: 36px;
+      font-weight: 800;
+      color: #e2e8f0;
+    }
+
+    .stock-meta { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+    .divider { width: 1px; background: #2d3748; align-self: stretch; }
+
+    .target-range {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .range-bar-wrap {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 20px 28px;
+      flex: 2;
+    }
+
+    .range-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .range-bar {
+      position: relative;
+      height: 8px;
+      background: #2d3748;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .range-fill {
+      position: absolute;
+      left: 0;
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+    }
+
+    .range-pin {
+      position: absolute;
+      top: -4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #6366f1;
+      transform: translateX(-50%);
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .range-bear { color: #ef4444; font-weight: 700; }
+    .range-current { color: #6366f1; font-weight: 700; }
+    .range-bull { color: #10b981; font-weight: 700; }
+
+    .consensus-pills {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .cpill {
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .cpill-buy { background: #0d2420; color: #34d399; border: 1px solid #10b981; }
+    .cpill-hold { background: #1a1500; color: #fcd34d; border: 1px solid #f59e0b; }
+    .cpill-sell { background: #2d1515; color: #f87171; border: 1px solid #ef4444; }
+
+    /* ANALYST CARDS */
+    .event-card { max-width: 1100px; margin: 0 auto 40px; padding: 0 24px; }
+
+    .event-header {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .event-icon { font-size: 28px; line-height: 1; margin-top: 2px; }
+    .event-meta { flex: 1; }
+
+    .event-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #10b981;
+      margin-bottom: 6px;
+    }
+
+    .event-title { font-size: 20px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+    .event-date { font-size: 13px; color: #64748b; }
+
+    .narratives {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-left: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative {
+      padding: 24px;
+      border-bottom: 1px solid #2d3748;
+      border-right: 1px solid #2d3748;
+    }
+
+    .narrative:last-child { border-right: none; }
+
+    .narrative-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+
+    .source-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-bull { background: #10b981; }
+    .dot-bear { background: #ef4444; }
+    .dot-neutral { background: #f59e0b; }
+
+    .source-name { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .source-tag {
+      font-size: 11px;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-left: auto;
+    }
+
+    .tag-bull { color: #34d399; background: #0d2420; }
+    .tag-bear { color: #f87171; background: #2d1515; }
+    .tag-neutral { color: #fcd34d; background: #1a1500; }
+
+    .price-target {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pt-amount {
+      font-size: 32px;
+      font-weight: 900;
+    }
+
+    .pt-bull { color: #10b981; }
+    .pt-bear { color: #ef4444; }
+    .pt-neutral { color: #f59e0b; }
+
+    .pt-updown {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .pt-up { background: #0d2420; color: #34d399; }
+    .pt-down { background: #2d1515; color: #f87171; }
+    .pt-flat { background: #1a1500; color: #fcd34d; }
+
+    .analyst-list {
+      list-style: none;
+      margin-bottom: 16px;
+    }
+
+    .analyst-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #1e2535;
+      font-size: 12px;
+    }
+
+    .analyst-list li:last-child { border-bottom: none; }
+
+    .analyst-name { color: #94a3b8; }
+    .analyst-firm { color: #64748b; font-size: 11px; }
+    .analyst-target { font-weight: 700; }
+
+    .narrative h3 {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #64748b;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+
+    .narrative h3:first-of-type { margin-top: 0; }
+
+    .emphasis-list { list-style: none; margin-bottom: 12px; }
+
+    .emphasis-list li {
+      font-size: 13px;
+      color: #94a3b8;
+      padding: 4px 0 4px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .emphasis-list li::before { content: "→"; position: absolute; left: 0; color: #4b5563; }
+
+    .omission {
+      background: #1a1205;
+      border: 1px solid #44320a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #d97706;
+      margin-top: 12px;
+    }
+
+    .omission strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; color: #92400e; }
+
+    /* AI SUMMARY */
+    .ai-summary {
+      background: linear-gradient(135deg, #0d2420, #0f1117);
+      border: 1px solid #065f46;
+      border-top: none;
+      border-radius: 0 0 16px 16px;
+      padding: 28px;
+    }
+
+    .ai-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #34d399;
+      margin-bottom: 16px;
+    }
+
+    .ai-label::before { content: "✦"; font-size: 14px; }
+
+    .ai-summary h2 { font-size: 17px; font-weight: 700; margin-bottom: 12px; color: #e2e8f0; }
+
+    .ai-summary p { font-size: 14px; line-height: 1.7; color: #94a3b8; margin-bottom: 12px; }
+
+    .key-question {
+      background: #1a1f2e;
+      border: 1px solid #3730a3;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+
+    .key-question-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #818cf8;
+      margin-bottom: 8px;
+    }
+
+    .key-question-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e2e8f0;
+      line-height: 1.4;
+    }
+
+    .divergence-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+    .pill {
+      background: #0d2420;
+      border: 1px solid #065f46;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #34d399;
+    }
+
+    /* FACT TABLE */
+    .fact-check-bar { max-width: 1100px; margin: 0 auto 40px; padding: 0 24px; }
+
+    .fact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .fact-status { font-size: 16px; flex-shrink: 0; }
+    .fact-text { flex: 1; color: #cbd5e1; line-height: 1.5; }
+    .fact-source { font-size: 11px; color: #4b5563; white-space: nowrap; }
+
+    .section-label {
+      max-width: 1100px;
+      margin: 0 auto 14px;
+      padding: 0 24px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #4b5563;
+    }
+
+    /* METRICS */
+    .metrics { max-width: 1100px; margin: 0 auto 32px; padding: 0 24px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+
+    .metric {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .metric-number { font-size: 24px; font-weight: 900; color: #10b981; line-height: 1; margin-bottom: 4px; }
+    .metric-number.red { color: #ef4444; }
+    .metric-number.yellow { color: #f59e0b; }
+    .metric-label { font-size: 11px; color: #64748b; line-height: 1.4; }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid #1e2535;
+      color: #4b5563;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    footer strong { color: #10b981; }
+
+    @media (max-width: 768px) {
+      .narratives { grid-template-columns: 1fr; }
+      .narrative { border-right: none !important; }
+      .hero h1 { font-size: 26px; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .stock-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Analyst<span>Scope</span></div>
+    <div class="badge">Демо · 30 мая 2026</div>
+  </header>
+
+  <div class="hero">
+    <h1>Одна акция.<br><em>Три реальности.</em></h1>
+    <p>ИИ агрегирует отчёты аналитиков ведущих компаний Уолл-стрит и объясняет — где и почему расходятся их прогнозы.</p>
+  </div>
+
+  <!-- STOCK HEADER -->
+  <div class="stock-header">
+    <div class="stock-info">
+      <div>
+        <div class="stock-ticker">TSLA</div>
+        <div class="stock-name">Tesla, Inc. · NASDAQ</div>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="stock-price">$435.79</div>
+        <div class="stock-meta">29 мая 2026 · Капитализация $1.64 трлн</div>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Консенсус</div>
+        <div class="consensus-pills">
+          <span class="cpill cpill-buy">Покупать ×24</span>
+          <span class="cpill cpill-hold">Держать ×17</span>
+          <span class="cpill cpill-sell">Продавать ×6</span>
+        </div>
+        <div style="font-size:11px;color:#64748b;margin-top:8px;">47 аналитиков покрывают акцию</div>
+      </div>
+    </div>
+    <div class="range-bar-wrap" style="flex:1.5;">
+      <div class="range-label">Диапазон целевых цен на 12 месяцев</div>
+      <div class="range-bar">
+        <div class="range-fill" style="width:100%;"></div>
+        <div class="range-pin" style="left: calc((435.79 - 125) / (600 - 125) * 100%);"></div>
+      </div>
+      <div class="range-labels">
+        <span class="range-bear">Медведи $125</span>
+        <span class="range-current">Сейчас $435</span>
+        <span class="range-bull">Быки $600</span>
+      </div>
+      <div style="font-size:11px;color:#64748b;margin-top:10px;">Разброс: <strong style="color:#e2e8f0;">$475</strong> — наибольший среди компаний S&P 500 такой капитализации</div>
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="section-label">Ключевые показатели</div>
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-number">$97.9B</div>
+      <div class="metric-label">Выручка TTM</div>
+    </div>
+    <div class="metric">
+      <div class="metric-number yellow">~400×</div>
+      <div class="metric-label">P/E (EPS $1.09)</div>
+    </div>
+    <div class="metric">
+      <div class="metric-number red">-47%</div>
+      <div class="metric-label">Изменение чистой прибыли 2025</div>
+    </div>
+    <div class="metric">
+      <div class="metric-number red">5.0%</div>
+      <div class="metric-label">Операционная маржа TTM</div>
+    </div>
+    <div class="metric">
+      <div class="metric-number">+67%</div>
+      <div class="metric-label">Рост энергосегмента г/г</div>
+    </div>
+  </div>
+
+  <!-- ANALYST VIEWS -->
+  <div class="event-card">
+    <div class="event-header">
+      <div class="event-icon">📊</div>
+      <div class="event-meta">
+        <div class="event-label">Расхождение аналитиков · 47 компаний</div>
+        <div class="event-title">Tesla (TSLA) — самая спорная акция Уолл-стрит с капитализацией $1T+</div>
+        <div class="event-date">Целевые цены от $125 до $600 · Обновлено май 2026</div>
+      </div>
+    </div>
+
+    <div class="narratives">
+
+      <!-- BULLS -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-bull"></div>
+          <div class="source-name">Быки</div>
+          <div class="source-tag tag-bull">24 аналитика</div>
+        </div>
+
+        <div class="price-target">
+          <span class="pt-amount pt-bull">$600</span>
+          <span class="pt-updown pt-up">+38% потенциал</span>
+        </div>
+
+        <ul class="analyst-list">
+          <li><div><div class="analyst-name">Dan Ives</div><div class="analyst-firm">Wedbush</div></div><span class="analyst-target" style="color:#10b981;">$600</span></li>
+          <li><div><div class="analyst-name">Ben Kallo</div><div class="analyst-firm">Robert W. Baird</div></div><span class="analyst-target" style="color:#10b981;">$522</span></li>
+          <li><div><div class="analyst-name">Andres Sheppard</div><div class="analyst-firm">Cantor Fitzgerald</div></div><span class="analyst-target" style="color:#10b981;">$510</span></li>
+          <li><div><div class="analyst-name">Alexander Potter</div><div class="analyst-firm">Piper Sandler</div></div><span class="analyst-target" style="color:#10b981;">$500</span></li>
+          <li><div><div class="analyst-name">John Murphy</div><div class="analyst-firm">Bank of America</div></div><span class="analyst-target" style="color:#10b981;">$460</span></li>
+        </ul>
+
+        <h3>Основной тезис</h3>
+        <ul class="emphasis-list">
+          <li>Tesla — не автопроизводитель, а AI/автономность/роботика платформа</li>
+          <li>Запуск Cybercab (роботакси) в конце 2026 = смена правил игры для регулярной выручки</li>
+          <li>Программа гуманоидных роботов Optimus стоит $100–200 на акцию отдельно</li>
+          <li>Энергетический сегмент растёт на 67% г/г с маржой выше чем у автомобилей</li>
+          <li>Больше миль с FSD чем у всех конкурентов вместе — преимущество по данным накапливается</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Что быки преуменьшают</strong>
+          P/E ~400x. Чистая прибыль упала на 47% в 2025. Репутационный ущерб от Маска/DOGE. FSD «в 12 месяцах» уже 8 лет подряд.
+        </div>
+      </div>
+
+      <!-- BEARS -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-bear"></div>
+          <div class="source-name">Медведи</div>
+          <div class="source-tag tag-bear">6 аналитиков</div>
+        </div>
+
+        <div class="price-target">
+          <span class="pt-amount pt-bear">$125</span>
+          <span class="pt-updown pt-down">-71% риск</span>
+        </div>
+
+        <ul class="analyst-list">
+          <li><div><div class="analyst-name">Colin Langan</div><div class="analyst-firm">Wells Fargo</div></div><span class="analyst-target" style="color:#ef4444;">$125</span></li>
+          <li><div><div class="analyst-name">Glenn Thum</div><div class="analyst-firm">Phillip Securities</div></div><span class="analyst-target" style="color:#ef4444;">$215</span></li>
+          <li><div><div class="analyst-name">Ryan Brinkman</div><div class="analyst-firm">JPMorgan</div></div><span class="analyst-target" style="color:#ef4444;">Продавать</span></li>
+          <li><div><div class="analyst-name">Stephan Lingnau</div><div class="analyst-firm">Erste Group</div></div><span class="analyst-target" style="color:#ef4444;">Продавать</span></li>
+        </ul>
+
+        <h3>Основной тезис</h3>
+        <ul class="emphasis-list">
+          <li>При цене $435 и EPS $1.09, P/E ~400x — ни один автопроизводитель никогда этого не оправдывал</li>
+          <li>Чтобы обосновать цену через прибыль, EPS должен вырасти в 10 раз — в автопроме такого не бывало</li>
+          <li>Участие Маска в DOGE привело к падению поставок в Европе на -20% г/г</li>
+          <li>BYD обогнал Tesla по мировым продажам в Q1 2026 — ценовая власть быстро слабеет</li>
+          <li>Конкуренция от BYD, VW, Hyundai усиливается — продвинутые ADAS вдвое дешевле</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Что медведи преуменьшают</strong>
+          Опционную ценность автономности и роботики. Маржу программного обеспечения Tesla. Энергетический бизнес, который реально быстро растёт.
+        </div>
+      </div>
+
+      <!-- NEUTRALS -->
+      <div class="narrative">
+        <div class="narrative-header">
+          <div class="source-dot dot-neutral"></div>
+          <div class="source-name">Нейтральные</div>
+          <div class="source-tag tag-neutral">17 аналитиков</div>
+        </div>
+
+        <div class="price-target">
+          <span class="pt-amount pt-neutral">$415</span>
+          <span class="pt-updown pt-flat">-5% / справедливо оценена</span>
+        </div>
+
+        <ul class="analyst-list">
+          <li><div><div class="analyst-name">Andrew Percoco</div><div class="analyst-firm">Morgan Stanley</div></div><span class="analyst-target" style="color:#f59e0b;">$415</span></li>
+          <li><div><div class="analyst-name">—</div><div class="analyst-firm">Goldman Sachs</div></div><span class="analyst-target" style="color:#f59e0b;">Нейтрально</span></li>
+          <li><div><div class="analyst-name">Dan Levy</div><div class="analyst-firm">Barclays</div></div><span class="analyst-target" style="color:#f59e0b;">$360</span></li>
+          <li><div><div class="analyst-name">Joseph Spak</div><div class="analyst-firm">UBS</div></div><span class="analyst-target" style="color:#f59e0b;">$364</span></li>
+          <li><div><div class="analyst-name">Elizabelle Pang</div><div class="analyst-firm">DBS</div></div><span class="analyst-target" style="color:#f59e0b;">$400</span></li>
+        </ul>
+
+        <h3>Основной тезис</h3>
+        <ul class="emphasis-list">
+          <li>Фундаментальные показатели не оправдывают более высокий мультипликатор без прогресса в автономности</li>
+          <li>Медведи недооценивают опционную ценность роботики и энергетики — $125 слишком мало</li>
+          <li>Быки недооценивают риски исполнения — сроки FSD переносились неоднократно</li>
+          <li>Waymo уже работает коммерчески — преимущество Tesla менее защищено чем заявляется</li>
+          <li>Акция «справедливо оценена при базовом сценарии, но с малым запасом прочности»</li>
+        </ul>
+
+        <div class="omission">
+          <strong>Проблема нейтральных</strong>
+          Сидеть на заборе значит ошибиться в любом случае. Если Cybercab выстрелит — $415 смешная цена. Если автономность снова сдвинется — $415 всё равно дорого.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ai-summary">
+      <div class="ai-label">AI · Анализ расхождений аналитиков</div>
+      <h2>Почему 47 аналитиков так резко расходятся во мнениях?</h2>
+
+      <div class="key-question">
+        <div class="key-question-label">Ключевой вопрос</div>
+        <div class="key-question-text">Tesla — это автопроизводитель? Или AI и роботика компания, которая заодно делает машины?</div>
+      </div>
+
+      <p>
+        Это не обычный спор об оценке. Быки и медведи <strong>анализируют разные компании</strong>. Дэн Айвс из Wedbush ($600) оценивает Tesla как AI-платформу, где автомобильный бизнес достаётся бесплатно — он оценивает автономность и роботику отдельно в $400+/акцию. Колин Ланган из Wells Fargo ($125) оценивает её как автокомпанию с падающей маржой, повреждённым брендом и P/E 400x, который ни один автопроизводитель никогда не оправдывал.
+      </p>
+      <p>
+        Оба анализа внутренне непротиворечивы. Спор о том, каким бизнесом Tesla будет преимущественно через 3 года — и это действительно неизвестно сегодня.
+      </p>
+      <p>
+        <strong>В чём они согласны:</strong> Q1 2026 показал стабилизацию автомобильного бизнеса после тяжёлого 2025. Энергетика — реальный быстрорастущий бизнес. EPS $1.09 и маржа 5% — реальные проблемы для краткосрочной оценки.
+      </p>
+      <p>
+        <strong>Когда разрешится спор:</strong> Запуск Cybercab (конец 2026) и коммерческое развёртывание Optimus — это бинарные события, которые скорее всего схлопнут это расхождение — в ту или иную сторону.
+      </p>
+
+      <div class="divergence-pills">
+        <span class="pill">Авто vs. AI платформа</span>
+        <span class="pill">Запуск Cybercab (конец 2026) — ключевой триггер</span>
+        <span class="pill">Риск отвлечения Маска не учтён быками</span>
+        <span class="pill">P/E ~400x — неоправдан или неважен?</span>
+        <span class="pill">Конкуренция BYD ускоряется</span>
+        <span class="pill">Энергосегмент: недооценённый джокер</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Ключевые финансовые показатели · Верифицированные данные</div>
+  <div class="fact-check-bar">
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Выручка Q1 2026: $22.4 млрд (+15.8% кв/кв) — автомобильный бизнес стабилизируется после падения 2025</div>
+      <div class="fact-source">Отчётность Tesla</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Чистая прибыль упала на 47% в 2025 — EPS $1.09 TTM, операционная маржа 5.0%</div>
+      <div class="fact-source">Финансы Tesla</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Энергетический сегмент вырос на 67% г/г — маржа выше чем у автомобилей</div>
+      <div class="fact-source">Отчётность Tesla</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">Поставки в Европе упали ~20% г/г в Q1 2026 — репутационный ущерб от Маска/DOGE, указывают Wells Fargo и JPMorgan</div>
+      <div class="fact-source">Несколько аналитиков</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">✅</div>
+      <div class="fact-text">BYD обогнал Tesla по мировым продажам в Q1 2026 — впервые стал безоговорочным лидером рынка EV</div>
+      <div class="fact-source">Отраслевые данные</div>
+    </div>
+    <div class="fact-row">
+      <div class="fact-status">⚠️</div>
+      <div class="fact-text">Коммерческий запуск Cybercab ожидается «в конце 2026» — заявление Tesla, независимо не верифицировано</div>
+      <div class="fact-source">Только прогноз Tesla</div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>AnalystScope</strong> · Работает на Gemini 2.5 Pro + Vertex AI · Построено на Google Cloud</p>
+    <p style="margin-top:8px">Прототип-демо. Источники: Wedbush, Wells Fargo, Morgan Stanley, UBS, Barclays, Bank of America, JPMorgan, отчётность Tesla — май 2026.</p>
+    <p style="margin-top:8px; font-size:12px; color:#374151;">⚠️ Не является инвестиционной рекомендацией. Только для информационных целей.</p>
+  </footer>
+
+</body>
+</html>
